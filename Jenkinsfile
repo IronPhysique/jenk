@@ -1,38 +1,26 @@
 pipeline {
     agent any
 
-    environment {
-        REPO_URL = 'https://github.com/IronPhysique/jenk'
-        DOCKER_IMAGE = 'my-node-app'
-    }
-
     stages {
-        stage('Clone Repository') {
+        stage('Init') {
             steps {
-                git url: "${REPO_URL}"
+                sh 'docker stop nodejs-project || true'
+                sh 'docker rm nodejs-project || true'
+                sh 'docker rm -f $(docker ps -aq) || true'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
-                }
+                sh 'docker build -t nodejs-project:${BUILD_NUMBER} .'
+                sh 'docker build -t nodejs-project:latest .'
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run') {
             steps {
-                script {
-                    docker.image("${DOCKER_IMAGE}").run('-p 5000:5000')
-                }
+                sh 'docker run -p 80:5000 --name nodejs-project -d nodejs-project:${BUILD_NUMBER}'
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
