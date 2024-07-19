@@ -24,7 +24,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image("${DOCKER_IMAGE}").run('-p 3000:3000')
+                    docker.image("${DOCKER_IMAGE}").run('-p 5000:5000')
                 }
             }
         }
