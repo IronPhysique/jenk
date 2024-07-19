@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://gitlab.com/Reece-Elder/devops-m5-nodeproject.git'
+        REPO_URL = 'https://github.com/IronPhysique/jenk'
         DOCKER_IMAGE = 'my-node-app'
     }
 
